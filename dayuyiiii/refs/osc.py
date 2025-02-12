@@ -15,18 +15,3 @@ class Osc:
         out = self.amp*np.sin(2*np.pi*(np.arange(self.frame,self.frame+CHUNK))*self.freq/SRATE)
         self.frame += CHUNK
         return out
-    
-
-    #frecuencia
-    def getFreq(self):
-        return self.freq
-    
-    def setFreq(self, newFreq):
-        self.freq = newFreq
-
-    #volumen
-    def getAmp(self):
-        return self.amp
-
-    def setAmp(self, vol):
-        self.amp = vol
