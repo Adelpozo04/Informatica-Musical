@@ -28,14 +28,6 @@ class ADSR:
                 self.state = 'off'            
             return out
 
-        #elif self.state=='rel': 
-        #    out = self.rel.next()   
-        #    # cuando se acaba el release pasa a estado off           
-        #    if out.size==0:
-        #        self.state = 'off'
-        #    self.last = out[-1]
-        #    return out
-
     def start(self):
         self.state='act'    
         self.act.reset()
@@ -43,4 +35,3 @@ class ADSR:
     def release(self):        
         self.rel.reset()
         self.state='rel'    
-

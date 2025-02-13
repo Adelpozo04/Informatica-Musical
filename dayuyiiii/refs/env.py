@@ -21,7 +21,7 @@ class Env:
         # construimos la envolvente generando segmentos entre los puntos dados
         self.env = np.zeros(0)        
         (x0,y0) = points[0]  # punto inicial
-        for (x,y) in points[1:]:<
+        for (x,y) in points[1:]:
             self.env = np.concatenate((
                 self.env, 
                 np.linspace(y0,y,x-x0+1)[:-1] # generamos x-x0+1 puntos y luego descartamos el último 

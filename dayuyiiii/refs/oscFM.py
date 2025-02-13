@@ -26,3 +26,19 @@ class OscFM:
         out =  self.amp*np.sin(2*np.pi*self.fc*sample/SRATE + mod)
         self.frame += CHUNK
         return out 
+
+    def setBeta(self,beta):
+        self.beta = beta
+        self.mod.amp = beta
+
+    def setFm(self,fm):
+        self.fm = fm
+        self.mod.freq = fm
+
+    def getBeta(self):
+        return self.beta    
+
+    def getFm(self):
+        return self.fm
+
+        
