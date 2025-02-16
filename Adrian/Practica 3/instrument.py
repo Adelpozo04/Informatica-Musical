@@ -7,7 +7,7 @@ from synthFM import *
 from tkinter import ttk 
 
 class Instrument:
-    def __init__(self,tk,name="FM synthetizer",amp=0.2,ratio=3,beta=0.6): 
+    def __init__(self,tk,name="FM synthetizer",amp=0.2,ratio=3,betaFreq=440, betaAmp=0.5): 
         
         frame = LabelFrame(tk, text=name, bg="#808090")
         frame.pack(side=LEFT)
@@ -21,8 +21,11 @@ class Instrument:
         self.ratioS = Slider(frameOsc,'ratio',packSide=TOP,
                            ini=ratio,from_=0.0,to=20.0,step=0.5)
     
-        self.betaS = Slider(frameOsc,'beta',packSide=TOP,
-                            ini=beta,from_=0.0,to=10.0,step=0.05) 
+        self.betaFreqS = Slider(frameOsc,'betaFreq',packSide=TOP,
+                            ini=betaFreq,from_=0.0,to=880.0,step=110) 
+        
+        self.betaAmpS = Slider(frameOsc,'betaAmp',packSide=TOP,
+                            ini=betaAmp,from_=0.0,to=10.0,step=0.5) 
         
         # una ventana de texto interactiva para poder lanzar notas con el teclado del ordenador
         text = Text(frameOsc,height=4,width=40)
@@ -33,7 +36,7 @@ class Instrument:
         shapes = LabelFrame(frame, text="Shapes", bg="#808090")
         shapes.pack(side=LEFT, fill="both", expand="yes")
 
-        sFM = LabelFrame(frame, text="FM", bg="#808090")
+        sFM = LabelFrame(shapes, text="FM", bg="#808090")
         sFM.pack(side=LEFT, fill="both", expand="yes")
 
         sFC = LabelFrame(shapes, text="FC", bg="#808090")
@@ -76,7 +79,7 @@ class Instrument:
 
     # obtenemos todos los parámetros del sinte (puede servir para crear presets)
     def getConfig(self):
-        return (self.ampS.get(),self.ratioS.get(),self.betaS.get(),
+        return (self.ampS.get(),self.ratioS.get(),self.betaFreqS.get(), self.betaAmpS.get(),
                 self.attackS.get(), self.decayS.get(), self.sustainS.get(),
                 self.releaseS.get(), self.shapeFM.get(), self.shapeFC.get())
 
@@ -98,8 +101,8 @@ class Instrument:
 
         self.channels[midiNote]= SynthFM(
                 fc=freq,
-                amp=self.ampS.get(), ratio=self.ratioS.get(), beta=self.betaS.get(),
-                attack = self.attackS.get(), decay= self.decayS.get(),
+                amp=self.ampS.get(), ratio=self.ratioS.get(), betaFreq=self.betaFreqS.get(),
+                betaAmp=self.betaAmpS.get(), attack = self.attackS.get(), decay= self.decayS.get(),
                 sustain=self.sustainS.get(), release=self.releaseS.get(), 
                 shapeFM = self.shapeFM.get(), shapeFC = self.shapeFC.get())
 
