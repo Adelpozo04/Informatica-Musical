@@ -7,7 +7,7 @@ from synthFM import *
 from tkinter import ttk 
 
 class Instrument:
-    def __init__(self,tk,name="FM synthetizer",amp=0.2,ratio=3,betaFreq=440, betaAmp=0.5): 
+    def __init__(self,tk,name="FM synthetizer",amp=0.2,ratio=3,betaFreq=0, betaAmp=1.0): 
         
         frame = LabelFrame(tk, text=name, bg="#808090")
         frame.pack(side=LEFT)
@@ -69,8 +69,63 @@ class Instrument:
                     
         self.releaseS = Slider(frameADSR,'release',
                    ini=0.5,from_=0.0,to=4.0,step=0.05,orient=HORIZONTAL,packSide=TOP) 
+        
+        #Instrumento 2
 
+        frame2 = LabelFrame(tk, text=name, bg="#808090")
+        frame2.pack(side=LEFT)
+        # Synth params con sus sliders
+        frameOsc2 = LabelFrame(frame2, text="FM oscillator 2", bg="#808090")
+        frameOsc2.pack(side=LEFT, fill="both", expand="yes")
+        
+        self.ampS2 = Slider(frameOsc2,'amp 2',packSide=TOP,
+                           ini=amp,from_=0.0,to=1.0,step=0.05) 
 
+        self.ratioS2 = Slider(frameOsc2,'ratio 2',packSide=TOP,
+                           ini=ratio,from_=0.0,to=20.0,step=0.5)
+    
+        self.betaFreqS2 = Slider(frameOsc2,'betaFreq 2',packSide=TOP,
+                            ini=betaFreq,from_=0.0,to=880.0,step=110) 
+        
+        self.betaAmpS2 = Slider(frameOsc2,'betaAmp 2',packSide=TOP,
+                            ini=betaAmp,from_=0.0,to=10.0,step=0.5) 
+
+        shapes2 = LabelFrame(frame2, text="Shapes 2", bg="#808090")
+        shapes2.pack(side=LEFT, fill="both", expand="yes")
+
+        sFM2 = LabelFrame(shapes2, text="FM 2", bg="#808090")
+        sFM2.pack(side=LEFT, fill="both", expand="yes")
+
+        sFC2 = LabelFrame(shapes2, text="FC 2", bg="#808090")
+        sFC2.pack(side=LEFT, fill="both", expand="yes")
+
+        self.shapeFM2 = ttk.Combobox(sFM2, width = 27, state="readonly", values=['sin','triangle','square','sawtooth']) 
+
+        self.shapeFM2.set("sin")
+
+        self.shapeFM2.pack(side=LEFT)
+
+        self.shapeFC2 = ttk.Combobox(sFC2, width = 27, state="readonly", values=['sin','triangle','square','sawtooth']) 
+
+        self.shapeFC2.set("sin")
+
+        self.shapeFC2.pack(side=LEFT)
+        
+        
+        # ADSR params con sus sliders
+        frameADSR2 = LabelFrame(frame2, text="ADSR 2", bg="#808090")
+        frameADSR2.pack(side=LEFT, fill="both", expand="yes", )
+        self.attackS2 = Slider(frameADSR2,'attack 2',
+                           ini=0.01,from_=0.0,to=0.5,step=0.005,orient=HORIZONTAL,packSide=TOP) 
+
+        self.decayS2 = Slider(frameADSR2,'decay 2',
+                           ini=0.01,from_=0.0,to=0.5,step=0.005,orient=HORIZONTAL,packSide=TOP)
+
+        self.sustainS2 = Slider(frameADSR2,'sustain 2',
+                   ini=0.4,from_=0.0,to=1.0,step=0.01,orient=HORIZONTAL,packSide=TOP) 
+                    
+        self.releaseS2 = Slider(frameADSR2,'release 2',
+                   ini=0.5,from_=0.0,to=4.0,step=0.05,orient=HORIZONTAL,packSide=TOP)
         
         # canales indexados por la nota de lanzamiento -> solo una nota del mismo valor
         self.channels = dict()        
@@ -78,13 +133,18 @@ class Instrument:
                          
 
     # obtenemos todos los parámetros del sinte (puede servir para crear presets)
-    def getConfig(self):
+    def getConfigFirstInstrument(self):
         return (self.ampS.get(),self.ratioS.get(),self.betaFreqS.get(), self.betaAmpS.get(),
                 self.attackS.get(), self.decayS.get(), self.sustainS.get(),
                 self.releaseS.get(), self.shapeFM.get(), self.shapeFC.get())
+    
+    def getConfigSecondInstrument(self):
+        return (self.ampS2.get(),self.ratioS2.get(),self.betaFreqS2.get(), self.betaAmpS2.get(),
+                self.attackS2.get(), self.decayS2.get(), self.sustainS2.get(),
+                self.releaseS2.get(), self.shapeFM2.get(), self.shapeFC2.get())
 
     # activación de nota
-    def noteOn(self,midiNote):
+    def noteOn(self,midiNote, instrument = 0):
         # si está el dict de canales apagamos nota actual con envolvente de fadeout
         # y guardamos en tails. El next devolverá este tail y luego comenzará la nota
         if midiNote in self.channels:                   
@@ -99,12 +159,23 @@ class Instrument:
 
         print(self.shapeFM.get())
 
-        self.channels[midiNote]= SynthFM(
-                fc=freq,
-                amp=self.ampS.get(), ratio=self.ratioS.get(), betaFreq=self.betaFreqS.get(),
-                betaAmp=self.betaAmpS.get(), attack = self.attackS.get(), decay= self.decayS.get(),
-                sustain=self.sustainS.get(), release=self.releaseS.get(), 
-                shapeFM = self.shapeFM.get(), shapeFC = self.shapeFC.get())
+        if instrument == 0:
+
+            self.channels[midiNote]= SynthFM(
+                    fc=freq,
+                    amp=self.ampS.get(), ratio=self.ratioS.get(), betaFreq=self.betaFreqS.get(),
+                    betaAmp=self.betaAmpS.get(), attack = self.attackS.get(), decay= self.decayS.get(),
+                    sustain=self.sustainS.get(), release=self.releaseS.get(), 
+                    shapeFM = self.shapeFM.get(), shapeFC = self.shapeFC.get())
+            
+        else:
+
+            self.channels[midiNote]= SynthFM(
+                    fc=freq,
+                    amp=self.ampS2.get(), ratio=self.ratioS2.get(), betaFreq=self.betaFreqS2.get(),
+                    betaAmp=self.betaAmpS2.get(), attack = self.attackS2.get(), decay= self.decayS2.get(),
+                    sustain=self.sustainS2.get(), release=self.releaseS2.get(), 
+                    shapeFM = self.shapeFM2.get(), shapeFC = self.shapeFC2.get())
 
     # apagar nota -> propagamos noteOff al synth, que se encargará de hacer el release
     def noteOff(self,midiNote):
@@ -122,13 +193,21 @@ class Instrument:
         elif c in teclas:
             midiNote = 48+teclas.index(c) # buscamos indice y trasnportamos a C3 (48 en midi)        
             print(f'noteOn {midiNote}')
-            self.noteOn(midiNote)         # arrancamos noteOn con el instrumento 
+            self.noteOn(midiNote, 0)         # arrancamos noteOn con el instrumento 
+        elif c in teclas2:
+            midiNote = 60+teclas2.index(c) # buscamos indice y trasnportamos a C3 (48 en midi)        
+            print(f'noteOn {midiNote}')
+            self.noteOn(midiNote, 1)         # arrancamos noteOn con el instrumento 
             
 
     def up(self,event):
         c = event.keysym
         if c in teclas:
             midiNote = 48+teclas.index(c) # buscamos indice y hacemos el noteOff
+            print(f'noteOff {midiNote}')
+            self.noteOff(midiNote)
+        elif c in teclas2:
+            midiNote = 60+teclas2.index(c) # buscamos indice y hacemos el noteOff
             print(f'noteOff {midiNote}')
             self.noteOff(midiNote)
 
