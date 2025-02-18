@@ -25,7 +25,5 @@ afinacionJusta = afJustaB + afJustaB*2
 
 freqsJusta = [440*afJustaB[i%len(afJustaB)] for i in range(-69, 59)]
 
-#teclasD = "zxcvbnmqwertyu"  # 2 de teclas filas 
-#notasD =  "CDEFGABcdefgab"  # mapeadas a 2 octavas
-teclasD = "zsxdcvgbhnjmq2w3er5t6y7u"  # 2 de teclas filas 
-notasD =  "C.D.EF.G.A.Bc.d.ef.g.a.b"
+teclasD = "zxcvbnmqwertyu"  # 2 de teclas filas 
+notasD =  "CDEFGABcdefgab"  # mapeadas a 2 octavas
