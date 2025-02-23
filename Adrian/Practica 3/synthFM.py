@@ -8,12 +8,12 @@ from oscFM import *
 
 class SynthFM:
     def __init__(self,
-                fc=110,amp=1.0,ratio=0.5, betaFreq = 440, betaAmp = 0.3,   # parámetros del generador FM
+                fc=Constante(110),amp=Constante(1.0),ratio=Constante(0.5), betaFreq = Constante(440), betaAmp = Constante(0.3),   # parámetros del generador FM
                 attack=0.01,decay=0.02, sustain=0.3,release=1.0, shapeFM='sin', shapeFC='sin'): # parámetros del ADSR        
         self.fc = fc
         self.amp =  amp
         self.ratio = ratio
-        self.fm = self.ratio*self.fc # fm en función de fc y ratio
+        self.fm = Constante(self.ratio.next()*self.fc.next()) # fm en función de fc y ratio
         self.beta = osc.Osc(freq=betaFreq, amp=betaAmp)
         self.betaFreq = betaFreq
         self.betaAmp = betaAmp

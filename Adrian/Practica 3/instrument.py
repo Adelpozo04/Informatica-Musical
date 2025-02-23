@@ -3,6 +3,7 @@ from consts import *
 from tkinter import *
 from slider import *
 from adsr import *
+from constante import *
 from synthFM import *
 from tkinter import ttk 
 
@@ -22,7 +23,7 @@ class Instrument:
                            ini=ratio,from_=0.0,to=20.0,step=0.5)
     
         self.betaFreqS = Slider(frameOsc,'betaFreq',packSide=TOP,
-                            ini=betaFreq,from_=0.0,to=880.0,step=110) 
+                            ini=betaFreq,from_=0.0,to=880.0,step=27.5) 
         
         self.betaAmpS = Slider(frameOsc,'betaAmp',packSide=TOP,
                             ini=betaAmp,from_=0.0,to=10.0,step=0.5) 
@@ -73,10 +74,10 @@ class Instrument:
         #Instrumento 2
 
         frame2 = LabelFrame(tk, text=name, bg="#808090")
-        frame2.pack(side=LEFT)
+        frame2.pack(side=BOTTOM)
         # Synth params con sus sliders
         frameOsc2 = LabelFrame(frame2, text="FM oscillator 2", bg="#808090")
-        frameOsc2.pack(side=LEFT, fill="both", expand="yes")
+        frameOsc2.pack(side=BOTTOM, fill="both", expand="yes")
         
         self.ampS2 = Slider(frameOsc2,'amp 2',packSide=TOP,
                            ini=amp,from_=0.0,to=1.0,step=0.05) 
@@ -85,7 +86,7 @@ class Instrument:
                            ini=ratio,from_=0.0,to=20.0,step=0.5)
     
         self.betaFreqS2 = Slider(frameOsc2,'betaFreq 2',packSide=TOP,
-                            ini=betaFreq,from_=0.0,to=880.0,step=110) 
+                            ini=betaFreq,from_=0.0,to=880.0,step=27.5) 
         
         self.betaAmpS2 = Slider(frameOsc2,'betaAmp 2',packSide=TOP,
                             ini=betaAmp,from_=0.0,to=10.0,step=0.5) 
@@ -162,18 +163,19 @@ class Instrument:
         if instrument == 0:
 
             self.channels[midiNote]= SynthFM(
-                    fc=freq,
-                    amp=self.ampS.get(), ratio=self.ratioS.get(), betaFreq=self.betaFreqS.get(),
-                    betaAmp=self.betaAmpS.get(), attack = self.attackS.get(), decay= self.decayS.get(),
+                    fc=Constante(freq),
+                    amp=Constante(self.ampS.get()), ratio=Constante(self.ratioS.get()), betaFreq=Constante(self.betaFreqS.get()),
+                    betaAmp=Constante(self.betaAmpS.get()), attack = self.attackS.get(), decay= self.decayS.get(),
                     sustain=self.sustainS.get(), release=self.releaseS.get(), 
                     shapeFM = self.shapeFM.get(), shapeFC = self.shapeFC.get())
             
         else:
 
+            #Ponerlos en una constante
             self.channels[midiNote]= SynthFM(
-                    fc=freq,
-                    amp=self.ampS2.get(), ratio=self.ratioS2.get(), betaFreq=self.betaFreqS2.get(),
-                    betaAmp=self.betaAmpS2.get(), attack = self.attackS2.get(), decay= self.decayS2.get(),
+                    fc=Constante(freq),
+                    amp=Constante(self.ampS2.get()), ratio=Constante(self.ratioS2.get()), betaFreq=Constante(self.betaFreqS2.get()),
+                    betaAmp=Constante(self.betaAmpS2.get()), attack = self.attackS2.get(), decay= self.decayS2.get(),
                     sustain=self.sustainS2.get(), release=self.releaseS2.get(), 
                     shapeFM = self.shapeFM2.get(), shapeFC = self.shapeFC2.get())
 
