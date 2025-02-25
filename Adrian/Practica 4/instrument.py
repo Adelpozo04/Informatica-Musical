@@ -162,6 +162,8 @@ class Instrument:
 
         if instrument == 0:
 
+            print("Instrumento 1")
+
             self.channels[midiNote]= SynthFM(
                     fc=Constante(freq),
                     amp=Constante(self.ampS.get()), ratio=Constante(self.ratioS.get()), betaFreq=Constante(self.betaFreqS.get()),
@@ -169,7 +171,9 @@ class Instrument:
                     sustain=self.sustainS.get(), release=self.releaseS.get(), 
                     shapeFM = self.shapeFM.get(), shapeFC = self.shapeFC.get())
             
-        else:
+        elif instrument == 1:
+
+            print("Instrumento 2")
 
             #Ponerlos en una constante
             self.channels[midiNote]= SynthFM(
@@ -178,6 +182,9 @@ class Instrument:
                     betaAmp=Constante(self.betaAmpS2.get()), attack = self.attackS2.get(), decay= self.decayS2.get(),
                     sustain=self.sustainS2.get(), release=self.releaseS2.get(), 
                     shapeFM = self.shapeFM2.get(), shapeFC = self.shapeFC2.get())
+            
+        else:
+            print("Index out of Bounds")
 
     # apagar nota -> propagamos noteOff al synth, que se encargará de hacer el release
     def noteOff(self,midiNote):

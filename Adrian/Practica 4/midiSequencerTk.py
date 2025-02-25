@@ -10,16 +10,12 @@ import time
 
 class MidiSequencerTk:
     # análogo a lo anterior
-    def __init__(self,tk,instrument=None, instrument2=None):
+    def __init__(self,tk,instrument=None):
         if instrument == None:            
             self.instrument = instrument.Instrument(tk,amp=0.2,ratio=3,beta=0.6)
         else:
             self.instrument = instrument
 
-        if instrument2 == None:            
-            self.instrument2 = instrument2.Instrument(tk,amp=0.2,ratio=3,beta=0.6)
-        else:
-            self.instrument2 = instrument2
 
         frame = LabelFrame(tk, text="Midi Sequencer", bg="#908060")
         frame.pack(side=LEFT)
@@ -37,10 +33,12 @@ class MidiSequencerTk:
         
         self.text = Text(frame,height=6,width=23)
         self.text.pack(side=RIGHT)
-        playBut = Button(frame,text="Play", command=self.play)
+        playBut = Button(frame,text="Play", command=lambda: self.play(0))
         playBut.pack(side=TOP)
         stopBut = Button(frame,text="Stop", command=self.stop)
         stopBut.pack(side=BOTTOM)
+        playButAll = Button(frame,text="PlayAll", command=lambda: self.playAll())
+        playButAll.pack(side=BOTTOM)
 
         #------
 
@@ -57,10 +55,9 @@ class MidiSequencerTk:
 
         self.transport = 0
         
-        
         self.text2 = Text(frame2,height=6,width=23)
         self.text2.pack(side=RIGHT)
-        playBut2 = Button(frame2,text="Play", command=self.play)
+        playBut2 = Button(frame2,text="Play", command=lambda: self.play(1))
         playBut2.pack(side=TOP)
         stopBut2 = Button(frame2,text="Stop", command=self.stop)
         stopBut2.pack(side=BOTTOM)
@@ -81,34 +78,50 @@ class MidiSequencerTk:
                 seq.append((accTime,'noteOff',m.note+self.transport,m.channel))
         return seq
 
-  
-    def play(self):
-        events = mido.MidiFile(self.file.get())
+    def playAll(self):
+        self.play(0)
+        self.play(1)
+
+    def play(self, index):
+        if index == 0:
+            events = mido.MidiFile(self.file.get())
+        elif index == 1:
+            events = mido.MidiFile(self.file2.get())
+        else:
+            print("Wrong index in Play")
+            return
+        
         seq = self.getSeq(events)
         print(seq)
 
         self.state = 'on'
-        self.playLoop(seq)
+        self.playLoop(seq, index)
 
-    def playLoop(self,seq,item=0,accTime=0):   
+    def playLoop(self,seq,index=0,item=0,accTime=0):   
         if item>=len(seq) or self.state =='off':
             return
 
         # ahora tenemos que procesar todos los ítems cuyo tiempo supere el crono accTime    
         while item<len(seq) and accTime>=seq[item][0]:
             (_,msg,midiNote,_chan) = seq[item]  # (time,'noteOff',midNote,channel)
-            self.text.insert('6.0',  f'{msg} {midiNote}\n') 
+
+            if index == 0:
+                self.text.insert('6.0',  f'{msg} {midiNote}\n') 
+            elif index == 1:
+                self.text2.insert('6.0',  f'{msg} {midiNote}\n') 
+            else:
+                print("Wrong index in PlayLoop")
+
             if msg=='noteOn':  
-                self.instrument.noteOn(midiNote)                   
+                self.instrument.noteOn(midiNote,index)                   
             else: # msg noteOff    
                 self.instrument.noteOff(midiNote)                   
             item += 1 # y avanzmos ítem
 
-
         # avanzammos crono 
         accTime += self.tick/1000
 
-        self.text.after(self.tick,lambda: self.playLoop(seq,item,accTime)) 
+        self.text.after(self.tick,lambda: self.playLoop(seq, index = index, item=item, accTime=accTime)) 
 
          
     def stop(self):
