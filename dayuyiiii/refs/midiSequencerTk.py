@@ -34,8 +34,8 @@ class MidiSequencerTk:
         self.text.pack(side=RIGHT)
         playBut = Button(frame,text="Play", command=self.play)
         playBut.pack(side=TOP)
-        stopBut = Button(frame,text="Stop", command=self.stop)
-        stopBut.pack(side=BOTTOM)
+        #stopBut = Button(frame,text="Stop", command=self.stop)
+        #stopBut.pack(side=BOTTOM)
 
         self.tick = 1
         self.state = 'off'
