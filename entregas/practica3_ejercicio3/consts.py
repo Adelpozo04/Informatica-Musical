@@ -18,3 +18,12 @@ pitchs = [ 220*2.0**(i/12.0) for i in range(len(teclas))]
 # El LA central es la nota midi 70 y su frecuencia es 440
 # contruimos hacia abajo y hacia arriba el resto de notas
 freqsMidi = [ 440*2.0**(i/12.0) for i in range(-69,59)]
+
+# afinacion justa 
+afJustaB = [1, 9/8, 5/4, 4/3, 3/2, 5/3, 15/8, 2]
+afinacionJusta = afJustaB + afJustaB*2
+
+freqsJusta = [440*afJustaB[i%len(afJustaB)] for i in range(-69, 59)]
+
+teclasD = "zxcvbnmqwertyu"  # 2 de teclas filas 
+notasD =  "CDEFGABcdefgab"  # mapeadas a 2 octavas
