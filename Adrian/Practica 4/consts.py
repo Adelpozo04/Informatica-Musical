@@ -1,3 +1,5 @@
+#Adrian del Pozo
+#Ines Primo
 
 # para todo el proyecto (no cambian)
 SRATE = 48000 # frecuencia de muestreo

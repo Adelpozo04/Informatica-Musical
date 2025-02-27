@@ -1,3 +1,5 @@
+#Adrian del Pozo
+#Ines Primo
 
 import numpy as np   
 import osc

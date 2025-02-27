@@ -1,3 +1,5 @@
+#Adrian del Pozo
+#Ines Primo
 
 from consts import *
 from abc import ABC, abstractmethod

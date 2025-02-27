@@ -1,3 +1,5 @@
+#Adrian del Pozo
+#Ines Primo
 
 from consts import *
 from tkinter import *
